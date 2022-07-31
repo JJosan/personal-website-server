@@ -8,6 +8,10 @@ var router = express.Router();
 router.get('/', async (req, res) => {
     try {
         
+        // do database things here
+
+        let scrapedShoes = []
+
         const browser = await puppeteer.launch( {headless : true} );
         const page = await browser.newPage();
         await page.goto('https://www.nike.com/t/air-force-1-07-mens-shoes-5QFp5Z/CW2288-111');
@@ -20,13 +24,20 @@ router.get('/', async (req, res) => {
             let curr = tags[i]
             let isDisabled = curr.querySelector("input").attributes.disabled
             let name = curr.querySelector("label").textContent
-            console.log(name)
-            console.log(isDisabled)
-            console.log()
+            if (isDisabled != undefined) {
+                scrapedShoes.push([name, 0])
+            } else {
+                scrapedShoes.push([name, 1])
+            }
         }
 
+        const mikeShoe = new req.models.Shoe({
+            Shoes : scrapedShoes,
+            LastUpdated : Math.round(Date.now() / 1000)
+        })
+        mikeShoe.save()
         res.json({
-            testing: "hello"
+            shoes: scrapedShoes
         })
 
     } catch(e) {
