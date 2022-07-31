@@ -1,7 +1,6 @@
 import express from 'express'
-import fetch from 'node-fetch'
 import parser from 'node-html-parser'
-import puppeteer from 'puppeteer';
+import puppeteer from 'puppeteer'
 
 var router = express.Router();
 
@@ -12,7 +11,12 @@ router.get('/', async (req, res) => {
 
         let scrapedShoes = []
 
-        const browser = await puppeteer.launch( {headless : true} );
+        const browser = await puppeteer.launch({
+            args: [
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+              ],
+        });
         const page = await browser.newPage();
         await page.goto('https://www.nike.com/t/air-force-1-07-mens-shoes-5QFp5Z/CW2288-111');
         const shoes = await page.$eval(".css-1j3x2vp", el => el.innerHTML);
@@ -31,11 +35,11 @@ router.get('/', async (req, res) => {
             }
         }
 
-        const mikeShoe = new req.models.Shoe({
-            Shoes : scrapedShoes,
-            LastUpdated : Math.round(Date.now() / 1000)
-        })
-        mikeShoe.save()
+        // const mikeShoe = new req.models.Shoe({
+        //     Shoes : scrapedShoes,
+        //     LastUpdated : Math.round(Date.now() / 1000)
+        // })
+        // mikeShoe.save()
         res.json({
             shoes: scrapedShoes
         })
