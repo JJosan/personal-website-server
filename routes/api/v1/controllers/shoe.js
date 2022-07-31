@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
             args: [
                 '--no-sandbox',
                 '--disable-setuid-sandbox',
-              ],
+              ]
         });
         const page = await browser.newPage();
         await page.goto('https://www.nike.com/t/air-force-1-07-mens-shoes-5QFp5Z/CW2288-111');
