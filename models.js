@@ -12,11 +12,16 @@ async function dbConnect() {
     console.log("connected to the database!")
 
     // set up schemas and models
-    const tripSchema = new mongoose.Schema({
+    const shoeSchema = new mongoose.Schema({
         Shoes : [[String, String]],
         LastUpdated : String
     })
-    models.Shoe = mongoose.model("Shoe", tripSchema)
+    models.Shoe = mongoose.model("Shoe", shoeSchema)
+
+    const poopSchema = new mongoose.Schema({
+        name : String
+    })
+    models.Poop = mongoose.model("Poop", poopSchema)
 
     console.log("created db models and schemas")
 }
